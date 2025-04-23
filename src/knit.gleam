@@ -1,5 +1,7 @@
 //// Start knitting with the [`new`](#new)/[`from`](#from) functions!
 ////
+//// > For complexity reasons, formatters are not aware of linebreaks! If you want to format a multiline string properly, you'll have to split it by line and map over it with the formatter.
+////
 //// > Except where otherwise noted; for formatters that take a `width`, the total length of the resulting `String` will never exceed `width`.
 
 import gleam/int
