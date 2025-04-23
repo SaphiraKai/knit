@@ -15,24 +15,54 @@ Rather than writing full formatters inline- which takes up lots of space- `knit`
 Formatters are composable, and can be chained together to create more complex formatters. It's recommended to use the `use` keyword for this:
 ```gleam
 import gleam/io
+import gleam/list
 import gleam/string
+
 import knit
 
 pub fn main() {
-  let expression = "260 * 267"
-  let result = 69_420
-  let width = string.length("Expression")
+  let header = {
+    let title_case = {
+      use val <- knit.with
+      string.split(val, " ") |> list.map(string.capitalise) |> string.join(" ")
+    }
 
-  let left = knit.new(knit.pad_left(_, width, " "))
-  let right = knit.from(int.to_string, knit.digit_separator(_, 3, " "))
+    use val <- knit.new
+    title_case(val)
+    |> knit.margin_centre(2, " ")
+    |> knit.pad_centre(48, "#")
+    |> knit.margin_right(1, "\n")
+  }
 
-  io.println(left("Expression") <> " | " <> expression)
-  io.println(left("Result") <> " | " <> right(result))
+  let body_line = {
+    use val <- knit.new
+    val
+    |> knit.pad_left(40, " ")
+    |> knit.margin_centre(6, " ")
+    |> knit.margin_centre(2, "|")
+    |> knit.margin_right(1, "\n")
+  }
+
+  let value = knit.new(knit.pad_right(_, 16, " "))
+
+  io.println(
+    header("gleam sponsorship receipt")
+    <> body_line("NAME: " <> value("Jane Doe"))
+    <> body_line("")
+    <> body_line("SUBTOTAL: " <> value("$16"))
+    <> body_line("EST. TAX: " <> value("1.50 hugs"))
+    <> body_line("TOTAL: " <> value("$16 + 1.50 hugs")),
+  )
 }
 ```
 ```text
-Expression | 260 * 267
-    Result | 69 420
+########## Gleam Sponsorship Receipt ###########
+|                     NAME: Jane Doe           |
+|                                              |
+|                 SUBTOTAL: $16                |
+|                 EST. TAX: 1.50 hugs          |
+|                    TOTAL: $16 + 1.50 hugs    |
+
 ```
 
 Further documentation can be found at <https://hexdocs.pm/knit>.

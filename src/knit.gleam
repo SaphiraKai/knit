@@ -267,3 +267,142 @@ pub fn from(
     formatter(Yarn(str, string.length(str))).string
   }
 }
+
+/// Convert any `fn(String) -> String` into a composable formatter.
+///
+/// - The formatter returned by this function will always call `string.length()`, take care when calling repeatedly on large inputs.
+///
+/// ## Examples:
+/// ```gleam
+/// let header = {
+///   use val <- knit.new
+///   val |> knit.with(string.uppercase) |> knit.pad_centre(32, "-")
+/// }
+///
+/// echo header("section header") // "---------SECTION HEADER---------"
+/// ```
+/// ```gleam
+/// let header = {
+///   let title_case = {
+///     use val <- knit.with
+///     string.split(val, " ") |> list.map(string.capitalise) |> string.join(" ")
+///   }
+///   use val <- knit.new
+///   title_case(val) |> knit.pad_centre(32, " ")
+/// }
+///
+/// echo header("section 2: electric boogaloo") // "  Section 2: Electric Boogaloo  "
+/// ```
+pub fn with(this: fn(String) -> String) -> fn(Yarn) -> Yarn {
+  fn(yarn: Yarn) {
+    let str = this(yarn.string)
+    Yarn(str, string.length(str))
+  }
+}
+
+/// Convert any `fn(String, a) -> String` into a composable formatter.
+///
+/// - The formatter returned by this function will always call `string.length()`, take care when calling repeatedly on large inputs.
+/// - If you need to pass more than one argument, try using a tuple!
+///
+/// ## Examples:
+/// ```gleam
+/// // todo
+/// ```
+pub fn with_arg(this: fn(String, a) -> String) -> fn(Yarn, a) -> Yarn {
+  fn(yarn: Yarn, a) {
+    let str = this(yarn.string, a)
+    Yarn(str, string.length(str))
+  }
+}
+
+/// Pad the left side of a `String` with `fill`, `amount` times.
+///
+/// - If `amount` is less than 0, it will be clamped to 0.
+/// - `fill` is truncated to the first character.
+/// - If `fill` is `""`, it will default to `" "`.
+///
+/// ## Examples:
+/// ```gleam
+/// knit.new(knit.margin_left(_, 4, " "))("hello world") // "    hello world"
+/// ```
+pub fn margin_left(this: Yarn, by amount: Int, with fill: String) -> Yarn {
+  let fill = string.first(fill) |> result.unwrap(" ")
+  let Yarn(str, len) = this
+  let amount = int.max(amount, 0)
+
+  Yarn(string.repeat(fill, amount) <> str, len + amount)
+}
+
+/// Pad the right side of a `String` with `fill`, `amount` times.
+///
+/// - If `amount` is less than 0, it will be clamped to 0.
+/// - `fill` is truncated to the first character.
+/// - If `fill` is `""`, it will default to `" "`.
+///
+/// ## Examples:
+/// ```gleam
+/// knit.new(knit.margin_right(_, 4, " "))("hello world") // "hello world    "
+/// ```
+pub fn margin_right(this: Yarn, by amount: Int, with fill: String) -> Yarn {
+  let fill = string.first(fill) |> result.unwrap(" ")
+  let Yarn(str, len) = this
+  let amount = int.max(amount, 0)
+
+  Yarn(str <> string.repeat(fill, amount), len + amount)
+}
+
+/// Pad both sides of a `String` with `fill`, adding `amount` characters total.
+///
+/// - If `amount` is less than 0, it will be clamped to 0.
+/// - `fill` is truncated to the first character.
+/// - If `fill` is `""`, it will default to `" "`.
+///
+/// ## Examples:
+/// ```gleam
+/// knit.new(knit.margin_centre(_, 4, " "))("hello world") // "  hello world  "
+/// ```
+pub fn margin_centre(this: Yarn, by amount: Int, with fill: String) -> Yarn {
+  let fill = string.first(fill) |> result.unwrap(" ")
+  let Yarn(str, len) = this
+  let amount = int.max(amount, 0)
+  let pfx = string.repeat(fill, amount / 2)
+  let sfx = pfx <> string.repeat(fill, amount % 2)
+
+  Yarn(pfx <> str <> sfx, len + amount)
+}
+
+pub fn main() {
+  let header = {
+    let title_case = {
+      use val <- with
+      string.split(val, " ") |> list.map(string.capitalise) |> string.join(" ")
+    }
+
+    use val <- new
+    title_case(val)
+    |> margin_centre(2, " ")
+    |> pad_centre(48, "#")
+    |> margin_right(1, "\n")
+  }
+
+  let body_line = {
+    use val <- new
+    val
+    |> pad_left(40, " ")
+    |> margin_centre(6, " ")
+    |> margin_centre(2, "|")
+    |> margin_right(1, "\n")
+  }
+
+  let value = new(pad_right(_, 16, " "))
+
+  io.println(
+    header("gleam sponsorship receipt")
+    <> body_line("NAME: " <> value("Jane Doe"))
+    <> body_line("")
+    <> body_line("SUBTOTAL: " <> value("$16"))
+    <> body_line("EST. TAX: " <> value("1.50 hugs"))
+    <> body_line("TOTAL: " <> value("$16 + 1.50 hugs")),
+  )
+}
