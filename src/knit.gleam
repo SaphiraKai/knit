@@ -85,7 +85,7 @@ pub fn pad_left(this: Yarn, to width: Int, with fill: String) -> Yarn {
 
   case len {
     len if len > width -> this
-    len -> Yarn(string.repeat(fill, width - len) <> str, width)
+    _ -> Yarn(string.pad_start(str, width, fill), width)
   }
 }
 
@@ -107,7 +107,7 @@ pub fn pad_right(this: Yarn, to width: Int, with fill: String) -> Yarn {
 
   case len {
     len if len > width -> this
-    len -> Yarn(str <> string.repeat(fill, width - len), width)
+    _ -> Yarn(string.pad_end(str, width, fill), width)
   }
 }
 
