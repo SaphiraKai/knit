@@ -1,6 +1,6 @@
 //// Start knitting with the [`new`](#new)/[`from`](#from) functions!
 ////
-//// > Except where otherwise noted; for formatters that take a `width`, the total length of the resulting `String` will never exceed `width.`
+//// > Except where otherwise noted; for formatters that take a `width`, the total length of the resulting `String` will never exceed `width`.
 
 import gleam/int
 import gleam/io
@@ -14,7 +14,7 @@ pub opaque type Yarn {
 }
 
 /// Drop characters from the left side of a `String` if it exceeds `width`.
-/// 
+///
 /// - If `width` is less than 0, it will be clamped to 0.
 ///
 /// ## Examples:
@@ -32,7 +32,7 @@ pub fn crop_left(this: Yarn, to width: Int) -> Yarn {
 }
 
 /// Drop characters from the right side of a `String` if it exceeds `width`.
-/// 
+///
 /// - If `width` is less than 0, it will be clamped to 0.
 ///
 /// ## Examples:
@@ -50,7 +50,7 @@ pub fn crop_right(this: Yarn, to width: Int) -> Yarn {
 }
 
 /// Drop characters equally from both sides of a `String` if it exceeds `width`.
-/// 
+///
 /// - If `width` is less than 0, it will be clamped to 0.
 ///
 /// ## Examples:
@@ -68,7 +68,7 @@ pub fn crop_centre(this: Yarn, to width: Int) -> Yarn {
 }
 
 /// Pad the left side of a `String` with `fill` if it is less than `width`.
-/// 
+///
 /// - The resulting `String` will be allowed to exceed `width`.
 /// - If `width` is less than 0, it will be clamped to 0.
 /// - `fill` is truncated to the first character.
@@ -90,7 +90,7 @@ pub fn pad_left(this: Yarn, to width: Int, with fill: String) -> Yarn {
 }
 
 /// Pad the right side of a `String` with `fill` if it is less than `width`.
-/// 
+///
 /// - The resulting `String` will be allowed to exceed `width`.
 /// - If `width` is less than 0, it will be clamped to 0.
 /// - `fill` is truncated to the first character.
@@ -112,7 +112,7 @@ pub fn pad_right(this: Yarn, to width: Int, with fill: String) -> Yarn {
 }
 
 /// Pad both sides of a `String` with `fill` if it is less than `width`.
-/// 
+///
 /// - The resulting `String` will be allowed to exceed `width`.
 /// - If `width` is less than 0, it will be clamped to 0.
 /// - `fill` is truncated to the first character.
@@ -222,7 +222,7 @@ pub fn digit_separator(
   Yarn(sign <> integer <> decimal, len + separator_count)
 }
 
-/// Create a new formatting function that accepts `String`s.
+/// Create a new formatter that accepts `String`s.
 ///
 /// ## Examples:
 /// ```gleam
@@ -242,7 +242,7 @@ pub fn new(formatter: fn(Yarn) -> Yarn) -> fn(String) -> String {
   fn(str) { formatter(Yarn(str, string.length(str))).string }
 }
 
-/// Create a new formatting function that accepts any type you can convert to a `String`.
+/// Create a new formatter that accepts any type you can convert to a `String`.
 ///
 /// ## Examples:
 /// ```gleam
