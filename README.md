@@ -1,7 +1,7 @@
 # knit
 ## *Knit your strings!*
-[![Package Version](https://img.shields.io/hexpm/v/knit)](https://hex.pm/packages/knit)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/knit/)
+[![Package Version](https://img.shields.io/hexpm/v/knit_string)](https://hex.pm/packages/knit_string)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/knit_string/)
 ---
 
 `knit` is a Gleam library for formatting strings.
