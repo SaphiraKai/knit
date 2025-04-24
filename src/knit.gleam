@@ -233,8 +233,8 @@ pub fn digit_separator(
 /// ```
 /// ```gleam
 /// let fmt = {
-///   use val <- knit.new
-///   val |> knit.crop_centre(9) |> knit.pad_centre(9, " ")
+///   use yarn <- knit.new
+///   yarn |> knit.crop_centre(9) |> knit.pad_centre(9, " ")
 /// }
 ///
 /// fmt("hello world") // "ello worl"
@@ -253,8 +253,8 @@ pub fn new(formatter: fn(Yarn) -> Yarn) -> fn(String) -> String {
 /// ```
 /// ```gleam
 /// let normalise = {
-///   use val <- knit.from(fn(a) { a |> float.to_precision(2) |> float.to_string })
-///   val |> knit.pad_right(8, "0")
+///   use yarn <- knit.from(fn(a) { a |> float.to_precision(2) |> float.to_string })
+///   yarn |> knit.pad_right(8, "0")
 /// }
 ///
 /// normalise(3.1415926) // "3.140000"
@@ -277,8 +277,8 @@ pub fn from(
 /// ## Examples:
 /// ```gleam
 /// let header = {
-///   use val <- knit.new
-///   val |> knit.with(string.uppercase) |> knit.pad_centre(32, "-")
+///   use yarn <- knit.new
+///   yarn |> knit.with(string.uppercase) |> knit.pad_centre(32, "-")
 /// }
 ///
 /// echo header("section header") // "---------SECTION HEADER---------"
@@ -286,11 +286,11 @@ pub fn from(
 /// ```gleam
 /// let header = {
 ///   let title_case = {
-///     use val <- knit.with
-///     string.split(val, " ") |> list.map(string.capitalise) |> string.join(" ")
+///     use yarn <- knit.with
+///     string.split(yarn, " ") |> list.map(string.capitalise) |> string.join(" ")
 ///   }
-///   use val <- knit.new
-///   title_case(val) |> knit.pad_centre(32, " ")
+///   use yarn <- knit.new
+///   title_case(yarn) |> knit.pad_centre(32, " ")
 /// }
 ///
 /// echo header("section 2: electric boogaloo") // "  Section 2: Electric Boogaloo  "
