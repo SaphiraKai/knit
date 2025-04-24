@@ -23,20 +23,20 @@ import knit
 pub fn main() {
   let header = {
     let title_case = {
-      use val <- knit.with
-      string.split(val, " ") |> list.map(string.capitalise) |> string.join(" ")
+      use string <- knit.with
+      string.split(string, " ") |> list.map(string.capitalise) |> string.join(" ")
     }
 
-    use val <- knit.new
-    title_case(val)
+    use yarn <- knit.new
+    title_case(yarn)
     |> knit.margin_centre(2, " ")
     |> knit.pad_centre(48, "#")
     |> knit.margin_right(1, "\n")
   }
 
   let body_line = {
-    use val <- knit.new
-    val
+    use yarn <- knit.new
+    yarn
     |> knit.pad_left(40, " ")
     |> knit.margin_centre(6, " ")
     |> knit.margin_centre(2, "|")
