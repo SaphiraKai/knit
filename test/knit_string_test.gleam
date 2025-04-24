@@ -124,17 +124,11 @@ pub fn margin_test() {
 pub fn simple_wrap_test() {
   knit.from_string("1234567890abcdef")
   |> knit.simple_wrap(8)
-  |> should.equal([
-    knit.from_string("12345678"),
-    knit.from_string("90abcdef")
-  ])
+  |> should.equal([knit.from_string("12345678"), knit.from_string("90abcdef")])
 
   knit.from_string("1234567890abcdef")
   |> knit.simple_wrap(12)
-  |> should.equal([
-    knit.from_string("1234567890ab"),
-    knit.from_string("cdef")
-  ])
+  |> should.equal([knit.from_string("1234567890ab"), knit.from_string("cdef")])
 }
 
 pub fn split_join_test() {
