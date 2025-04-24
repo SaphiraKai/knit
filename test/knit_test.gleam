@@ -8,63 +8,143 @@ pub fn main() {
 }
 
 pub fn crop_test() {
-  knit.new(knit.crop_left(_, 12))("1234567890abcdef")
-  |> should.equal("567890abcdef")
+  knit.from_string("1234567890abcdef")
+  |> knit.crop_left(12)
+  |> should.equal(knit.from_string("567890abcdef"))
 
-  knit.new(knit.crop_right(_, 12))("1234567890abcdef")
-  |> should.equal("1234567890ab")
+  knit.from_string("1234567890abcdef")
+  |> knit.crop_right(12)
+  |> should.equal(knit.from_string("1234567890ab"))
 
-  knit.new(knit.crop_centre(_, 12))("1234567890abcdef")
-  |> should.equal("34567890abcd")
+  knit.from_string("1234567890abcdef")
+  |> knit.crop_centre(12)
+  |> should.equal(knit.from_string("34567890abcd"))
 
-  knit.new(knit.crop_left(_, 16))("1234567890abcdef")
-  |> should.equal("1234567890abcdef")
+  knit.from_string("1234567890abcdef")
+  |> knit.crop_left(16)
+  |> should.equal(knit.from_string("1234567890abcdef"))
+
+  knit.from_string("1234567890abcdef")
+  |> knit.crop_centre(0)
+  |> should.equal(knit.from_string(""))
 }
 
 pub fn pad_test() {
-  knit.new(knit.pad_left(_, 24, ""))("1234567890abcdef")
-  |> should.equal("        1234567890abcdef")
+  knit.from_string("1234567890abcdef")
+  |> knit.pad_left(24, "")
+  |> should.equal(knit.from_string("        1234567890abcdef"))
 
-  knit.new(knit.pad_right(_, 24, ""))("1234567890abcdef")
-  |> should.equal("1234567890abcdef        ")
+  knit.from_string("1234567890abcdef")
+  |> knit.pad_right(24, "")
+  |> should.equal(knit.from_string("1234567890abcdef        "))
 
-  knit.new(knit.pad_centre(_, 24, ""))("1234567890abcdef")
-  |> should.equal("    1234567890abcdef    ")
+  knit.from_string("1234567890abcdef")
+  |> knit.pad_centre(24, "")
+  |> should.equal(knit.from_string("    1234567890abcdef    "))
 
-  knit.new(knit.pad_right(_, 24, "."))("1234567890abcdef")
-  |> should.equal("1234567890abcdef........")
+  knit.from_string("1234567890abcdef")
+  |> knit.pad_right(24, ".")
+  |> should.equal(knit.from_string("1234567890abcdef........"))
 
-  knit.new(knit.pad_right(_, 24, "-|"))("1234567890abcdef")
-  |> should.equal("1234567890abcdef--------")
+  knit.from_string("1234567890abcdef")
+  |> knit.pad_right(24, "-|")
+  |> should.equal(knit.from_string("1234567890abcdef--------"))
 
-  knit.new(knit.pad_left(_, 16, ""))("1234567890abcdef")
-  |> should.equal("1234567890abcdef")
+  knit.from_string("1234567890abcdef")
+  |> knit.pad_left(16, "")
+  |> should.equal(knit.from_string("1234567890abcdef"))
+
+  knit.from_string("1234567890abcdef")
+  |> knit.pad_centre(0, "")
+  |> should.equal(knit.from_string("1234567890abcdef"))
 }
 
 pub fn ellipsize_test() {
-  knit.new(knit.ellipsize(_, 12, ""))("1234567890abcdef")
-  |> should.equal("123456789...")
+  knit.from_string("1234567890abcdef")
+  |> knit.ellipsize(12, "")
+  |> should.equal(knit.from_string("123456789..."))
 
-  knit.new(knit.ellipsize(_, 12, "~"))("1234567890abcdef")
-  |> should.equal("1234567890a~")
+  knit.from_string("1234567890abcdef")
+  |> knit.ellipsize(12, "~")
+  |> should.equal(knit.from_string("1234567890a~"))
 
-  knit.new(knit.ellipsize(_, 2, ""))("1234567890abcdef")
-  |> should.equal("..")
+  knit.from_string("1234567890abcdef")
+  |> knit.ellipsize(2, "")
+  |> should.equal(knit.from_string(".."))
+
+  knit.from_string("1234567890abcdef")
+  |> knit.ellipsize(0, "")
+  |> should.equal(knit.from_string(""))
 }
 
 pub fn digit_separator_test() {
-  knit.new(knit.digit_separator(_, 3, ""))("1234567890")
-  |> should.equal("1,234,567,890")
+  knit.from_string("1234567890")
+  |> knit.digit_separator(3, "")
+  |> should.equal(knit.from_string("1,234,567,890"))
 
-  knit.new(knit.digit_separator(_, 3, ""))("1234567.890")
-  |> should.equal("1,234,567.890")
+  knit.from_string("1234567.890")
+  |> knit.digit_separator(3, "")
+  |> should.equal(knit.from_string("1,234,567.890"))
 
-  knit.new(knit.digit_separator(_, 3, ""))("-123456.7890")
-  |> should.equal("-123,456.7890")
+  knit.from_string("-123456.7890")
+  |> knit.digit_separator(3, "")
+  |> should.equal(knit.from_string("-123,456.7890"))
 
-  knit.new(knit.digit_separator(_, -1, ""))("123456.7890")
-  |> should.equal("123,456.7890")
+  knit.from_string("123456.7890")
+  |> knit.digit_separator(3, "")
+  |> should.equal(knit.from_string("123,456.7890"))
 
-  knit.new(knit.digit_separator(_, 2, "_"))("1234567890")
-  |> should.equal("12_34_56_78_90")
+  knit.from_string("1234567890")
+  |> knit.digit_separator(2, "_")
+  |> should.equal(knit.from_string("12_34_56_78_90"))
+}
+
+pub fn margin_test() {
+  knit.from_string("1234567890abcdef")
+  |> knit.margin_left(2, " ")
+  |> should.equal(knit.from_string("  1234567890abcdef"))
+
+  knit.from_string("1234567890abcdef")
+  |> knit.margin_right(2, " ")
+  |> should.equal(knit.from_string("1234567890abcdef  "))
+
+  knit.from_string("1234567890abcdef")
+  |> knit.margin_centre(2, " ")
+  |> should.equal(knit.from_string(" 1234567890abcdef "))
+
+  knit.from_string("1234567890abcdef")
+  |> knit.margin_centre(0, " ")
+  |> should.equal(knit.from_string("1234567890abcdef"))
+
+  knit.from_string("1234567890abcdef")
+  |> knit.margin_centre(0, "")
+  |> should.equal(knit.from_string("1234567890abcdef"))
+}
+
+pub fn simple_wrap_test() {
+  knit.from_string("1234567890abcdef")
+  |> knit.simple_wrap(8)
+  |> should.equal([
+    knit.from_string("12345678"),
+    knit.from_string("90abcdef")
+  ])
+
+  knit.from_string("1234567890abcdef")
+  |> knit.simple_wrap(12)
+  |> should.equal([
+    knit.from_string("1234567890ab"),
+    knit.from_string("cdef")
+  ])
+}
+
+pub fn split_join_test() {
+  knit.from_string("line 1\nline 2\nline 3")
+  |> knit.split("\n")
+  |> knit.join("\n")
+  |> should.equal(knit.from_string("line 1\nline 2\nline 3"))
+
+  knit.from_string("")
+  |> knit.split("\n")
+  |> knit.join("\n")
+  |> should.equal(knit.from_string(""))
 }
